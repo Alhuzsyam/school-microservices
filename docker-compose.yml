@@ -1,3 +1,160 @@
+# version: '3.8'
+
+# services:
+#   mysql:
+#     image: mysql:latest
+#     container_name: mysql
+#     restart: unless-stopped
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_DATABASE: school
+#     ports:
+#       - "3306:3306"
+#     volumes:
+#       - mysql_data:/var/lib/mysql
+
+#   phpmyadmin:
+#     image: phpmyadmin/phpmyadmin:latest
+#     container_name: phpmyadmin2
+#     restart: unless-stopped
+#     environment:
+#       PMA_HOST: mysql
+#       MYSQL_ROOT_PASSWORD: root
+#       PMA_USER: root
+#       PMA_PASSWORD: root
+#     ports:
+#       - "8084:80"
+
+#   mongodb:
+#     image: mongo:latest
+#     container_name: mongodb
+#     restart: unless-stopped
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: root
+#       MONGO_INITDB_ROOT_PASSWORD: root
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongodb_data:/data/db
+
+# volumes:
+#   mysql_data:
+#   mongodb_data:
+
+
+# version: '3.8'
+# services:
+#   mysql:
+#     image: mysql:latest
+#     container_name: mysql
+#     restart: unless-stopped
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_DATABASE: school
+#     ports:
+#       - "3306:3306"
+#     networks:
+#       - spring
+#     volumes:
+#       - mysql_data:/var/lib/mysql
+#   phpmyadmin:
+#     image: phpmyadmin/phpmyadmin:latest
+#     container_name: phpmyadmin2
+#     restart: unless-stopped
+#     environment:
+#       PMA_HOST: mysql
+#       MYSQL_ROOT_PASSWORD: root
+#       PMA_USER: root
+#       PMA_PASSWORD: root
+#     ports:
+#       - "8084:80"
+#     networks:
+#       - spring
+#   mongodb:
+#     image: mongo:latest
+#     container_name: mongodb
+#     restart: unless-stopped
+#     environment:
+#       MONGO_INITDB_ROOT_USERNAME: root
+#       MONGO_INITDB_ROOT_PASSWORD: root
+#     ports:
+#       - "27017:27017"
+#     networks:
+#       - spring
+#     volumes:
+#       - mongodb_data:/data/db
+#   registry:
+#     image: alhuz/registry:latest
+#     container_name: registry
+#     ports:
+#       - "8761:8761"
+#     networks:
+#       - spring
+#     environment:
+#       - SPRING_PROFILES_ACTIVE=docker
+#     restart: unless-stopped
+#   apigw:
+#     image: alhuz/apigw:latest
+#     container_name: apigw
+#     ports:
+#       - "18087:18087"
+#     environment:
+#       - SPRING_PROFILES_ACTIVE=docker
+#     depends_on:
+#       - registry
+#     networks:
+#       - spring
+#     restart: unless-stopped
+#   student:
+#     image: alhuz/student:latest
+#     container_name: student
+#     ports:
+#       - "18082:18082"
+#     networks:
+#       - spring
+#     environment:
+#       - SPRING_PROFILES_ACTIVE=docker
+#     depends_on:
+#       - mongodb
+#       - registry
+#     restart: unless-stopped
+#   achievemnt:
+#     image: alhuz/achievemnt:latest
+#     container_name: achievemnt
+#     ports:
+#       - "18083:18083"
+#     networks:
+#       - spring
+#     environment:
+#       - SPRING_PROFILES_ACTIVE=docker
+#     depends_on:
+#       - mongodb
+#       - registry
+#     restart: unless-stopped
+#   school:
+#     image: alhuz/school:latest
+#     container_name: school
+#     ports:
+#       - "18081:18081"
+#     networks:
+#       - spring
+#     environment:
+#       - SPRING_PROFILES_ACTIVE=docker
+#     depends_on:
+#       - mysql
+#       - registry
+#     restart: unless-stopped
+
+# networks:
+#   spring:
+#     driver: bridge
+
+# volumes:
+#   mysql_data:
+#   mongodb_data:
+
+
+
 version: '3.8'
 
 services:
@@ -10,8 +167,15 @@ services:
       MYSQL_DATABASE: school
     ports:
       - "3306:3306"
+    networks:
+      - spring
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$MYSQL_ROOT_PASSWORD"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -19,11 +183,13 @@ services:
     restart: unless-stopped
     environment:
       PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: root
+      PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: root
     ports:
       - "8084:80"
+    networks:
+      - spring
 
   mongodb:
     image: mongo:latest
@@ -34,8 +200,99 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: root
     ports:
       - "27017:27017"
+    networks:
+      - spring
     volumes:
       - mongodb_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongo --eval 'db.runCommand({ ping: 1 })'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  registry:
+    image: alhuz/registry:latest
+    container_name: registry
+    ports:
+      - "8761:8761"
+    networks:
+      - spring
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: unless-stopped
+
+  apigw:
+    image: alhuz/apigw:latest
+    container_name: apigw
+    ports:
+      - "18087:18087"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - registry
+    networks:
+      - spring
+    restart: unless-stopped
+
+  student:
+    image: alhuz/student:latest
+    container_name: student
+    ports:
+      - "18082:18082"
+    networks:
+      - spring
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SCHOOL_SERVICE_URL=http://school:18081
+    depends_on:
+      - mongodb
+      - registry
+      - school
+    restart: unless-stopped
+
+  achievemnt:
+    image: alhuz/achievemnt:latest
+    container_name: achievemnt
+    ports:
+      - "18083:18083"
+    networks:
+      - spring
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SCHOOL_SERVICE_URL=http://school:18081
+    depends_on:
+      - mongodb
+      - registry
+      - school
+    restart: unless-stopped
+
+  school:
+    image: alhuz/school:latest
+    container_name: school
+    ports:
+      - "18081:18081"
+    networks:
+      - spring
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=school
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+    depends_on:
+      - mysql
+      - registry
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:18081/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  spring:
+    driver: bridge
 
 volumes:
   mysql_data:

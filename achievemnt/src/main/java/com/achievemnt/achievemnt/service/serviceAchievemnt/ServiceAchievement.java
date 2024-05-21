@@ -45,8 +45,8 @@ public class ServiceAchievement {
     public ResponseEntity<?> fetchAchievementById(String id) {
         Optional<Achievemnt> data = repo.findById(id);
         if (data.isPresent()) {
-            Student student = restTemplate.getForObject("http://student/student/"+data.get().getNisn(), Student.class);
-            School school = restTemplate.getForObject("http://school/school/" + data.get().getSchoolId(), School.class);
+            Student student = restTemplate.getForObject("http://student:18082/student/"+data.get().getNisn(), Student.class);
+            School school = restTemplate.getForObject("http://school/school:18081/" + data.get().getSchoolId(), School.class);
             AchievementResponse achievementResponse = new AchievementResponse(
                 data.get().getNisn(),
                 data.get().getLomba(),
