@@ -10,9 +10,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudentResponse {
-    private String id;
+    // private String id;
+    private String nisn;
     private String name;
     private int age;
     private String gender;
+    private String major;
+    private String StatusAwal;
+    private String StatusAkhir;
+    private String NoIjazah;
     private School school;
 }
+
+
+   

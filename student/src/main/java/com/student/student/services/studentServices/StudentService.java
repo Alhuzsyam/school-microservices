@@ -30,15 +30,20 @@ public class StudentService {
     }
 
     public ResponseEntity<?> fetchStudentById(String id){
-        Optional<Student> student =  studentRepository.findById(id);
+        Optional<Student> student =  studentRepository.findByNisn(id);
         if(student.isPresent()){
             School school = restTemplate.getForObject("http://school/school/" + student.get().getSchoolId(), School.class);
             StudentResponse studentResponse = new StudentResponse(
-                    student.get().getId(),
+                    // student.get().getId(),
+                    student.get().getNisn(),
                     student.get().getName(),
                     student.get().getAge(),
                     student.get().getGender(),
-                    school
+                    student.get().getNoIjazah(),
+                    student.get().getStatusAwal(),
+                    student.get().getStatusAwal(),
+                    student.get().getMajor(),
+                    school       
             );
             return new ResponseEntity<>(studentResponse, HttpStatus.OK);
         }else{

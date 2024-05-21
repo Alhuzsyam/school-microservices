@@ -3,19 +3,23 @@ server:
 
 spring:
   application:
-    name: API-GATEWAYS
+    name: API-GATEWAY
   cloud:
     gateway:
       routes:
         - id: student
-          uri: lb://student
+          uri: lb://STUDENT
           predicates:
             - Path=/student/**
         - id: school
-          uri: lb://school           
+          uri: lb://SCHOOL           
           predicates:
             - Path=/school/**
-
+        - id: achievemnt
+          uri: lb://ACHIEVEMNT         
+          predicates:
+            - Path=/achievement/** 
+            
 eureka:
   client:
     register-with-eureka: true
