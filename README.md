@@ -48,7 +48,7 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 **Method:** POST  
 
-**API Endpoint:** `http://localhost:18081/school`
+**API Endpoint:** `http://localhost:18087/school`
 
 **Request Body:**
 ```json
@@ -72,7 +72,7 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 **Method:** GET 
 
-**API Endpoint:** `http://localhost:18081/school`
+**API Endpoint:** `http://localhost:18087/school`
 
 **Response:**
 ```json
@@ -95,7 +95,7 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 **Method:** GET
 
-**API Endpoint:** `http://localhost:18081/school/302`
+**API Endpoint:** `http://localhost:18087/school/302`
 
 **Response:**
 ```json
@@ -111,7 +111,7 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 **Method:** POST
 
-**API Endpoint:** `http://localhost:18082/student`
+**API Endpoint:** `http://localhost:18087/student`
 
 **Request Body**
 ```json
@@ -145,7 +145,7 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 **Method:** GET
 
-**API Endpoint:** `http://localhost:18082/student`
+**API Endpoint:** `http://localhost:18087/student`
 
 **Response**
 ```json
@@ -179,7 +179,7 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 **Method:** GET
 
-**API Endpoint:** `http://localhost:18082/student/321`
+**API Endpoint:** `http://localhost:18087/student/321`
 
 **Response**
 ```json
@@ -206,7 +206,7 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 **Method:** POST
 
-**API Endpoint:** `http://localhost:18083/achievement`
+**API Endpoint:** `http://localhost:18087/achievement`
 
 **Requestbody**
 ```json
@@ -233,7 +233,7 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 **Method:** GET
 
-**API Endpoint:** `http://localhost:18083/achievement`
+**API Endpoint:** `http://localhost:18087/achievement`
 
 **Response**
 ```json
@@ -258,7 +258,7 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 **Method:** GET
 
-**API Endpoint:** `http://localhost:18083/achievement/456`
+**API Endpoint:** `http://localhost:18087/achievement/456`
 
 **Response**
 ```json
@@ -279,6 +279,8 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 	}
 }
 ```
+### conclusion
+The ports for the API endpoints have been mapped using the API Gateway, so the original ports are not used. One of the main functions of the API Gateway is as a load balancer. The lb://SERVICE-NAME syntax in the uri field tells Spring Cloud Gateway to use the load balancer to resolve the service instances registered under the given SERVICE-NAME. This helps in distributing the load among available service instances and provides resilience and high availability for microservices.
 
 
 
