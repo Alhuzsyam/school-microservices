@@ -12,6 +12,7 @@ This application is a school management system that aims to track schools, stude
 5. **eureka-service-discovery**
 
 Each service serves a distinct purpose, with the Eureka service facilitating communication between them. Eureka Server is a service registry server in the Netflix OSS (Open Source Software) suite. It provides service discovery for microservices in a distributed environment by maintaining a registry of available microservices. This allows client microservices to discover and communicate with each other.
+![Uploading Screen Shot 2024-05-23 at 00.54.02.png…]()
 
 ### API Gateway
 
