@@ -44,9 +44,10 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 
 ## School Service
 
-### Add New School
+**Add New School**
 
 **Method:** POST  
+
 **API Endpoint:** `http://localhost:18081/school`
 
 **Request Body:**
@@ -68,10 +69,12 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 }
 ```
 **Get All Schools**
-**Method: GET**
+
+**Method:** GET 
+
 **API Endpoint:** `http://localhost:18081/school`
 
-Response:
+**Response:**
 ```json
 [
     {
@@ -88,34 +91,29 @@ Response:
     }
 ]
 ```
-## Add New Student
+**Get Spesifict Schools**
 
-**API Endpoint:** `http://localhost:18082/student`
+**Method:** GET
 
-### Request Body
+**API Endpoint:** `http://localhost:18081/school/302`
+
+**Response:**
 ```json
 {
-	"nisn": 456,
-	"name": "ALFI",
-	"age": 17,
-	"gender": "LAKI-LAKI",
-	"schoolId": 302,
-	"major": "IPA",
-	"noIjazah": "098765",
-	"statusAkhir": "LULUS",
-	"statusAwal": "SISWA BARU"
+	"id": 302,
+	"schoolName": "SMK 11 JAKARTA",
+	"location": "JAKARTA",
+	"principalName": "Mr.Alhuz"
 }
 ```
+## Student Service
+**Add New Student**
 
-markdown
-Copy code
-# API Documentation
-
-## Add New Student
+**Method:** POST
 
 **API Endpoint:** `http://localhost:18082/student`
 
-### Request Body
+**Request Body**
 ```json
 {
 	"nisn": 456,
@@ -143,6 +141,8 @@ Copy code
 	"statusAwal": "SISWA BARU"
 }
 ```
+
+
 
 
 
