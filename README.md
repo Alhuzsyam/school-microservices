@@ -1,4 +1,4 @@
-# School Microservices (Java Springboot)
+# School Microservices (Java Springboot - Docker)
 ![Untitled Diagram drawio (1)](https://github.com/Alhuzsyam/school-microservices/assets/64511435/963c120d-6c13-4175-b003-c2d05ac4ab30)
 
 ## Introduction
@@ -142,7 +142,98 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 }
 ```
 
+## Acheivement Service
+**Get all data**
 
+**Method:** GET
+
+**API Endpoint:** `http://localhost:18083/achievement`
+
+**Response**
+```json
+[
+	{
+		"nisn": "1234",
+		"capaian": "1st Place Achievement",
+		"lomba": "Line Follower Competition",
+		"tahun": "2024",
+		"schoolId": 202
+	},
+	{
+		"nisn": "123",
+		"capaian": "1st Place Achievement",
+		"lomba": "Line Follower Competition",
+		"tahun": "2024",
+		"schoolId": 1
+	},
+	{
+		"nisn": "321",
+		"capaian": "2nd Place Achievement",
+		"lomba": "Asian Coding Competition",
+		"tahun": "2024",
+		"schoolId": 252
+	},
+	{
+		"nisn": "456",
+		"capaian": "2nd Place Achievement",
+		"lomba": "Asian Coding Competition",
+		"tahun": "2024",
+		"schoolId": 302
+	}
+]
+```
+**Create new Data**
+
+**Method:** POST
+
+**API Endpoint:** `http://localhost:18083/achievement`
+
+**Requestbody**
+```json
+{
+  "nisn":"456",
+  "capaian": "2nd Place Achievement",
+  "lomba": "Asian Coding Competition",
+  "tahun": "2024",
+  "schoolId": 302
+}
+```
+**Response**
+```json
+{
+   "nisn":"456",
+  "capaian": "2nd Place Achievement",
+  "lomba": "Asian Coding Competition",
+  "tahun": "2024",
+  "schoolId": 302
+}
+```
+
+**Get spesifik data**
+
+**Method:** GET
+
+**API Endpoint:** `http://localhost:18083/achievement/456`
+
+**Response**
+```json
+{
+	"nisn": "456",
+	"lomba": "Asian Coding Competition",
+	"capaian": "2nd Place Achievement",
+	"tahun": "2024",
+	"school": {
+		"id": 302,
+		"schoolName": "SMK 11 JAKARTA",
+		"location": "JAKARTA",
+		"principalName": "Mr.Alhuz"
+	},
+	"student": {
+		"nisn": 456,
+		"name": "ALFI"
+	}
+}
+```
 
 
 
