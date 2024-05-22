@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-AchievemntApplication<achievemnt>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.achievemnt.achievemnt.AchievemntApplication",
+            "projectName": "achievemnt",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.achievemnt.achievemnt.AchievemntApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.697 s - in com.achievemnt.achievemnt.AchievemntApplicationTests

@@ -1,0 +1,5 @@
+com/school/school/SchoolApplication.class
+com/school/school/model/entity/School.class
+com/school/school/services/SchoolService.class
+com/school/school/controller/SchoolController.class
+com/school/school/model/repository/SchoolRepository.class
