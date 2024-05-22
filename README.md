@@ -141,47 +141,67 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 	"statusAwal": "SISWA BARU"
 }
 ```
-
-## Acheivement Service
-**Get all data**
+**Get all Student**
 
 **Method:** GET
 
-**API Endpoint:** `http://localhost:18083/achievement`
+**API Endpoint:** `http://localhost:18082/student`
 
 **Response**
 ```json
 [
 	{
-		"nisn": "1234",
-		"capaian": "1st Place Achievement",
-		"lomba": "Line Follower Competition",
-		"tahun": "2024",
-		"schoolId": 202
-	},
-	{
 		"nisn": "123",
-		"capaian": "1st Place Achievement",
-		"lomba": "Line Follower Competition",
-		"tahun": "2024",
-		"schoolId": 1
+		"name": "NASRUL",
+		"age": 17,
+		"gender": "MALE",
+		"schoolId": 202,
+		"major": "IPA",
+		"statusAwal": "SISWA BARU",
+		"statusAkhir": "LULUS",
+		"noIjazah": "0192810IQO"
 	},
 	{
 		"nisn": "321",
-		"capaian": "2nd Place Achievement",
-		"lomba": "Asian Coding Competition",
-		"tahun": "2024",
-		"schoolId": 252
-	},
-	{
-		"nisn": "456",
-		"capaian": "2nd Place Achievement",
-		"lomba": "Asian Coding Competition",
-		"tahun": "2024",
-		"schoolId": 302
+		"name": "ALHUZ",
+		"age": 17,
+		"gender": "LAKI-LAKI",
+		"schoolId": 252,
+		"major": "IPA",
+		"statusAwal": "SISWA BARU",
+		"statusAkhir": "LULUS",
+		"noIjazah": "098765"
 	}
 ]
 ```
+
+**Get spesifict Student**
+
+**Method:** GET
+
+**API Endpoint:** `http://localhost:18082/student/321`
+
+**Response**
+```json
+{
+	"nisn": "321",
+	"name": "ALHUZ",
+	"age": 17,
+	"gender": "LAKI-LAKI",
+	"major": "IPA",
+	"school": {
+		"id": 252,
+		"schoolName": "SMK 10 JAKARTA",
+		"location": "JAKARTA",
+		"principalName": "Mr.Brad"
+	},
+	"statusAwal": "SISWA BARU",
+	"statusAkhir": "SISWA BARU",
+	"noIjazah": "098765"
+}
+```
+
+## Acheivement Service
 **Create new Data**
 
 **Method:** POST
@@ -209,6 +229,31 @@ Overall, an API Gateway provides a centralized and efficient way to manage acces
 }
 ```
 
+**Get all data**
+
+**Method:** GET
+
+**API Endpoint:** `http://localhost:18083/achievement`
+
+**Response**
+```json
+[
+	{
+		"nisn": "1234",
+		"capaian": "1st Place Achievement",
+		"lomba": "Line Follower Competition",
+		"tahun": "2024",
+		"schoolId": 202
+	},
+	{
+		"nisn": "123",
+		"capaian": "1st Place Achievement",
+		"lomba": "Line Follower Competition",
+		"tahun": "2024",
+		"schoolId": 1
+	}
+]
+```
 **Get spesifik data**
 
 **Method:** GET
