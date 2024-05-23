@@ -286,3 +286,15 @@ The ports for the API endpoints have been mapped using the API Gateway, so the o
 
 
 
+## GET STARTED
+
+Follow these commands: 
+1. `cd /Frontend`
+2. Then run the command `node server.js`
+
+You will see an output like this: `Server is running on http://localhost:3000`.
+
+Open the URL in your browser.
+
+Here is the display:
+![alt text](<Screen Shot 2024-05-23 at 11.14.41.png>)
