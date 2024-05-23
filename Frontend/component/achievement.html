@@ -1,0 +1,100 @@
+<div class="container-fluid">
+    <div class="text">Student Details</div>
+</div>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md">
+                    <div class="form-group">
+                        <label for="nisn">NISN</label>
+                        <input type="text" class="form-control" id="nisn" aria-describedby="helpId" placeholder="Enter NISN">
+                    </div>
+                </div>
+            </div>
+            <div class="btn btn-primary" id="search">Search</div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mt-3" id="studentDetail" style="display: none;">
+    <div class="card">
+        <div class="card-body">
+            <h4>Student Details</h4>
+            <p><strong>NISN:</strong> <span id="studentNisn"></span></p>
+            <p><strong>Name:</strong> <span id="studentName"></span></p>
+            <p><strong>Age:</strong> <span id="studentAge"></span></p>
+            <p><strong>Gender:</strong> <span id="studentGender"></span></p>
+            <p><strong>School ID:</strong> <span id="studentSchoolId"></span></p>
+            <p><strong>Major:</strong> <span id="studentMajor"></span></p>
+            <p><strong>Status Awal:</strong> <span id="studentStatusAwal"></span></p>
+            <p><strong>Status Akhir:</strong> <span id="studentStatusAkhir"></span></p>
+            <p><strong>Certificate Number:</strong> <span id="studentNoIjazah"></span></p>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-body">
+            <h4>Achievement Details</h4>
+            <p><strong>Achievement:</strong> <span id="achievementCapaian"></span></p>
+            <p><strong>Competition:</strong> <span id="achievementLomba"></span></p>
+            <p><strong>Year:</strong> <span id="achievementTahun"></span></p>
+            <p><strong>School Name:</strong> <span id="achievementSchoolName"></span></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#search').click(function () {
+            var nisn = $('#nisn').val();
+
+            if (!nisn) {
+                alert('Please enter NISN to search.');
+                return;
+            }
+
+            $.get('http://localhost:18083/achievement/' + nisn, function (data) {
+                // Check if student details are present in response
+                if (data.student) {
+                    $('#studentNisn').text(data.student.nisn || 'N/A');
+                    $('#studentName').text(data.student.name || 'N/A');
+                    $('#studentAge').text(data.student.age || 'N/A');
+                    $('#studentGender').text(data.student.gender || 'N/A');
+                    $('#studentSchoolId').text(data.student.schoolId || 'N/A');
+                    $('#studentMajor').text(data.student.major || 'N/A');
+                    $('#studentStatusAwal').text(data.student.statusAwal || 'N/A');
+                    $('#studentStatusAkhir').text(data.student.statusAkhir || 'N/A');
+                    $('#studentNoIjazah').text(data.student.noIjazah || 'N/A');
+                } else {
+                    $('#studentNisn').text('N/A');
+                    $('#studentName').text('N/A');
+                    $('#studentAge').text('N/A');
+                    $('#studentGender').text('N/A');
+                    $('#studentSchoolId').text('N/A');
+                    $('#studentMajor').text('N/A');
+                    $('#studentStatusAwal').text('N/A');
+                    $('#studentStatusAkhir').text('N/A');
+                    $('#studentNoIjazah').text('N/A');
+                }
+
+                // Check if achievement details are present in response
+                if (data) {
+                    $('#achievementCapaian').text(data.capaian || 'N/A');
+                    $('#achievementLomba').text(data.lomba || 'N/A');
+                    $('#achievementTahun').text(data.tahun || 'N/A');
+                    $('#achievementSchoolName').text(data.school ? data.school.schoolName : 'N/A');
+                } else {
+                    $('#achievementCapaian').text('N/A');
+                    $('#achievementLomba').text('N/A');
+                    $('#achievementTahun').text('N/A');
+                    $('#achievementSchoolName').text('N/A');
+                }
+
+                $('#studentDetail').show();
+            }).fail(function () {
+                alert('Achievement not found.');
+            });
+        });
+    });
+</script>

@@ -1,0 +1,153 @@
+<div class="container-fluid">
+    <div class="text">Siswa</div>
+</div>
+<div class="container-fluid">
+    <!-- Form untuk menambahkan mahasiswa -->
+    <form id="studentForm">
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="nisn">NISN:</label>
+                    <input type="text" class="form-control" id="nisn" name="nisn" required>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="noIjazah">Certificate Number:</label>
+                    <input type="text" class="form-control" id="noIjazah" name="noIjazah" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" class="form-control" id="age" name="age" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select class="form-control" id="gender" name="gender" required>
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="major">Major:</label>
+                    <input type="text" class="form-control" id="major" name="major" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="schoolId">School:</label>
+                    <select class="form-control" id="schoolId" name="schoolId" required>
+                        <!-- Data sekolah akan dimasukkan di sini menggunakan JavaScript -->
+                    </select>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Student</button>
+    </form>
+    <br>
+    <!-- Tabel untuk menampilkan data mahasiswa -->
+    <table id="studentTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">NISN</th>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Gender</th>
+                <th scope="col">School</th>
+                <th scope="col">Major</th>
+                <th scope="col">Certificate Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data mahasiswa akan ditampilkan di sini -->
+        </tbody>
+    </table>
+</div>
+<script>
+    $(document).ready(function(){
+        // Mendapatkan data sekolah untuk opsi dropdown
+        $.get("http://localhost:18081/school", function(data){
+            var schoolDropdown = $('#schoolId');
+            $.each(data, function(index, school){
+                var option = '<option value="' + school.id + '">' + school.schoolName + '</option>';
+                schoolDropdown.append(option);
+            });
+        });
+
+        // Fungsi untuk menambahkan mahasiswa
+        $('#studentForm').submit(function(event){
+            event.preventDefault(); // Menghentikan pengiriman form
+
+            // Mendapatkan data dari form
+            var formData = {
+                nisn: $('#nisn').val(),
+                name: $('#name').val(),
+                age: $('#age').val(),
+                gender: $('#gender').val(),
+                schoolId: $('#schoolId').val(),
+                major: $('#major').val(),
+                noIjazah: $('#noIjazah').val(),
+                statusAwal: "SISWA BARU", // Default value
+                statusAkhir: "LULUS" // Default value
+            };
+
+            // Mengirim data ke API
+            $.ajax({
+                url: 'http://localhost:18082/student',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    alert('Student added successfully');
+                    // Memuat ulang tabel setelah menambahkan mahasiswa baru
+                    loadStudents();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error adding student:', status, error);
+                    alert('Failed to add student');
+                }
+            });
+        });
+
+        // Fungsi untuk mendapatkan dan menampilkan data mahasiswa
+        function loadStudents() {
+            $.get("http://localhost:18082/student", function(data){
+                var table = $('#studentTable tbody');
+                table.empty();
+
+                $.each(data, function(index, student){
+                    var row = '<tr>' +
+                                  '<td>' + student.nisn + '</td>' +
+                                  '<td>' + student.name + '</td>' +
+                                  '<td>' + student.age + '</td>' +
+                                  '<td>' + student.gender + '</td>' +
+                                  '<td>' + student.schoolId + '</td>' +
+                                  '<td>' + student.major + '</td>' +
+                                  '<td>' + student.noIjazah + '</td>' +
+                               '</tr>';
+                    table.append(row);
+                });
+            });
+        }
+
+        // Memuat data mahasiswa saat halaman dimuat
+        loadStudents();
+    });
+</script>

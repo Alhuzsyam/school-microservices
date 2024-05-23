@@ -1,0 +1,111 @@
+<div class="container-fluid">
+    <div class="text">Dashboard</div>
+</div>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="">School</label>
+                    <input type="text"
+                      class="form-control" name="" id="name" aria-describedby="helpId" placeholder="">
+                    <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+                  </div>
+            </div>
+            <div class="col-md">
+                <div class="form-group">
+                    <label for="">location</label>
+                    <input type="text"
+                      class="form-control" name="" id="location" aria-describedby="helpId" placeholder="">
+                    <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+                  </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="">Principal Name</label>
+            <input type="text"
+              class="form-control" name="" id="principal" aria-describedby="helpId" placeholder="">
+            <!-- <small id="helpId" class="form-text text-muted">Help text</small> -->
+          </div>
+          <div class="btn btn-primary" id="save">Add New</div>
+        </div>
+      </div>
+      <table id="schoolTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">School Name</th>
+                <th scope="col">Location</th>
+                <th scope="col">Principal Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data akan ditambahkan di sini -->
+        </tbody>
+    </table>
+
+<script>
+    $(document).ready(function(){
+    $.get("http://localhost:18081/school", function(data){
+                // Mendapatkan referensi tabel
+                var table = $('#schoolTable tbody');
+                
+                // Loop melalui setiap objek data dan menambahkan baris ke tabel
+                $.each(data, function(index, school){
+                    var row = '<tr>' +
+                                  '<th scope="row">' + school.id + '</th>' +
+                                  '<td>' + school.schoolName + '</td>' +
+                                  '<td>' + school.location + '</td>' +
+                                  '<td>' + school.principalName + '</td>' +
+                               '</tr>';
+                    table.append(row);
+                });
+            });
+    $('#save').click(function(){
+        // Reset border colors
+        $('input').css('border-color', '');
+
+        var schoolName = $('#name').val();
+        var location = $('#location').val();
+        var principalName = $('#principal').val();
+
+        // Check for empty fields
+        if (schoolName.trim() === '') {
+            $('#name').css('border-color', 'red');
+            return; // Exit function if field is empty
+        }
+        if (location.trim() === '') {
+            $('#location').css('border-color', 'red');
+            return; // Exit function if field is empty
+        }
+        if (principalName.trim() === '') {
+            $('#principal').css('border-color', 'red');
+            return; // Exit function if field is empty
+        }
+
+        var data = {
+            schoolName: schoolName,
+            location: location,
+            principalName: principalName
+        };
+
+        $.ajax({
+            url: 'http://localhost:18081/school',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function(response) {
+                alert('Data saved successfully');
+                // You can add more logic here, like clearing the form or updating the UI
+            },
+            error: function(xhr, status, error) {
+                console.error('Error saving data:', status, error);
+                alert('Failed to save data');
+            }
+        });
+    });
+});
+
+</script>

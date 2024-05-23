@@ -12,14 +12,21 @@ spring:
           predicates:
             - Path=/student/**
         - id: school
-          uri: lb://SCHOOL           
+          uri: lb://SCHOOL
           predicates:
             - Path=/school/**
-        - id: achievemnt
-          uri: lb://ACHIEVEMNT         
+        - id: achievement
+          uri: lb://ACHIEVEMENT
           predicates:
-            - Path=/achievement/** 
-            
+            - Path=/achievement/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+
 eureka:
   client:
     register-with-eureka: true
@@ -28,6 +35,3 @@ eureka:
       defaultZone: http://registry:8761/eureka/
   instance:
     prefer-ip-address: true
-  # instance:
-  #   hostname: registry
- 

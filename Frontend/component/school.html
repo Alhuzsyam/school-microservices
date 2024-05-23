@@ -1,0 +1,146 @@
+<div class="container-fluid">
+    <div class="text">Achievement Form</div>
+</div>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md">
+                    <div class="form-group">
+                        <label for="nisn">NISN</label>
+                        <select class="form-control" id="nisn" required></select>
+                    </div>
+                </div>
+                <div class="col-md">
+                    <div class="form-group">
+                        <label for="schoolId">School</label>
+                        <select class="form-control" id="schoolId" required></select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="capaian">Achievement</label>
+                <input type="text" class="form-control" id="capaian" placeholder="Enter achievement" required>
+            </div>
+            <div class="form-group">
+                <label for="lomba">Competition</label>
+                <input type="text" class="form-control" id="lomba" placeholder="Enter competition" required>
+            </div>
+            <div class="form-group">
+                <label for="tahun">Year</label>
+                <input type="text" class="form-control" id="tahun" placeholder="Enter year" required>
+            </div>
+            <div class="btn btn-primary" id="save">Add Achievement</div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Achievement List</h5>
+            <table id="achievementTable" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">NISN</th>
+                        <th scope="col">Achievement</th>
+                        <th scope="col">Competition</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">School Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data akan ditambahkan di sini -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let schools = {};
+
+        // Load NISN options
+        $.get('http://localhost:18082/student', function (students) {
+            var nisnSelect = $('#nisn');
+            students.forEach(function (student) {
+                nisnSelect.append('<option value="' + student.nisn + '" data-schoolid="' + student.schoolId + '">' + student.nisn + ' - ' + student.name + '</option>');
+            });
+        });
+
+        // Load School options and map school data
+        $.get('http://localhost:18081/school', function (schoolData) {
+            var schoolSelect = $('#schoolId');
+            schoolData.forEach(function (school) {
+                schoolSelect.append('<option value="' + school.id + '">' + school.schoolName + '</option>');
+                schools[school.id] = school.schoolName;
+            });
+
+            // Load Achievement Data
+            loadAchievements();
+        });
+
+        // Update schoolId based on selected NISN
+        $('#nisn').change(function () {
+            var selectedSchoolId = $(this).find(':selected').data('schoolid');
+            $('#schoolId').val(selectedSchoolId);
+        });
+
+        // Save achievement
+        $('#save').click(function () {
+            var nisn = $('#nisn').val();
+            var capaian = $('#capaian').val();
+            var lomba = $('#lomba').val();
+            var tahun = $('#tahun').val();
+            var schoolId = $('#schoolId').val();
+
+            if (!nisn || !capaian || !lomba || !tahun || !schoolId) {
+                alert('Please fill all fields.');
+                return;
+            }
+
+            var data = {
+                nisn: nisn,
+                capaian: capaian,
+                lomba: lomba,
+                tahun: tahun,
+                schoolId: schoolId
+            };
+
+            $.ajax({
+                url: 'http://localhost:18083/achievement',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert('Achievement added successfully');
+                    // Clear form fields
+                    $('#capaian').val('');
+                    $('#lomba').val('');
+                    $('#tahun').val('');
+                    $('#schoolId').val('');
+                    $('#nisn').val('');
+                    // Reload achievements
+                    loadAchievements();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error saving achievement:', status, error);
+                    alert('Failed to add achievement');
+                }
+            });
+        });
+
+        // Load achievements and update table
+        function loadAchievements() {
+            $.get('http://localhost:18083/achievement', function (achievements) {
+                var achievementTableBody = $('#achievementTable tbody');
+                achievementTableBody.empty(); // Clear existing rows
+
+                achievements.forEach(function (achievement) {
+                    var schoolName = schools[achievement.schoolId] || 'Unknown School';
+                    achievementTableBody.append('<tr><td>' + achievement.nisn + '</td><td>' + achievement.capaian + '</td><td>' + achievement.lomba + '</td><td>' + achievement.tahun + '</td><td>' + schoolName + '</td></tr>');
+                });
+            });
+        }
+    });
+</script>
